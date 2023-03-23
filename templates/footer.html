@@ -24,8 +24,46 @@
       });
     });
   }
+  });
 
-});
+  function submit_radio(element) {
+    if (element.checked){
+      element.parentElement.style.textDecoration = "line-through";
+      moveto = document.getElementById("done");
+      moveto.appendChild(element.parentElement.parentElement);
+      id = element.id;
+      $.ajax({
+        type: "POST",
+        url: "/dashboard",
+        data: {"method":"Done", "ID":id, "Done":true},
+        success: function(response) {
+          console.log(response);
+        },
+        error: function(xhr, status, error) {
+          console.log("Error: " + error);
+        }
+      });
+    }
+    else{
+      element.parentElement.style.textDecoration = "none";
+      moveto = document.getElementById("todo");
+      moveto.appendChild(element.parentElement.parentElement);
+      id = element.id;
+      $.ajax({
+        type: "POST",
+        url: "/dashboard",
+        data: {"method":"Done", "ID":id, "Done":false},
+        success: function(response) {
+          console.log(response);
+        },
+        error: function(xhr, status, error) {
+          console.log("Error: " + error);
+        }
+      });
+    }
+
+
+  }
 </script>
 </html>
 {{end}}

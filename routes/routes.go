@@ -20,6 +20,7 @@ func PublicRoutes(g *gin.RouterGroup, db *gorm.DB) {
 
 func PrivateRoutes(g *gin.RouterGroup, db *gorm.DB) {
 
-	g.GET("/dashboard", controllers.DashboardGetHandler())
+	g.GET("/dashboard", controllers.DashboardGetHandler(db))
+	g.POST("/dashboard", controllers.DashboardPostHandler(db))
 	g.GET("/logout", controllers.LogoutGetHandler())
 }

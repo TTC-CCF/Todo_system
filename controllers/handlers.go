@@ -1,6 +1,11 @@
 package controllers
 
 import (
+	// "fmt"
+
+	"fmt"
+	"strconv"
+
 	"github.com/gin-contrib/sessions"
 	"gorm.io/gorm"
 
@@ -151,13 +156,45 @@ func IndexGetHandler() gin.HandlerFunc {
 	}
 }
 
-func DashboardGetHandler() gin.HandlerFunc {
+func DashboardGetHandler(db *gorm.DB) gin.HandlerFunc {
 	return func(c *gin.Context) {
 		session := sessions.Default(c)
 		user := session.Get(globals.Userkey)
+		todolist := database.GetTodoList(db, fmt.Sprint(user))
 		c.HTML(http.StatusOK, "dashboard.html", gin.H{
-			"content": "This is a dashboard",
+			"todolist": todolist,
+			"content": "Create your Todoo here",
 			"user":    user,
 		})
+	}
+}
+
+func DashboardPostHandler(db *gorm.DB) gin.HandlerFunc {
+	return func(c *gin.Context) {
+		session := sessions.Default(c)
+		user := session.Get(globals.Userkey)		
+		method := c.Request.FormValue("method")
+		log.Println(method)
+		if method == "createTodo"{
+			title := c.PostForm("title")
+			if err := database.CreateTodo(db, fmt.Sprint(user), title); err != nil{
+				log.Println(err)
+				return
+			}
+		}
+		if method == "Done"{
+			idstring := c.Request.PostForm.Get("ID")
+			donestring := c.Request.PostForm.Get("Done")
+
+			log.Println(idstring)
+			donebool, _ := strconv.ParseBool(donestring)
+			idint, _:= strconv.Atoi(idstring)
+			if err := database.DoneTodo(db, idint, donebool); err != nil{
+				log.Println(err)
+				return
+			}
+		}
+
+		c.Redirect(http.StatusMovedPermanently, "/dashboard")
 	}
 }

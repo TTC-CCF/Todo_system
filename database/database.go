@@ -20,11 +20,19 @@ const (
 )
 
 type User struct{
-	Username string `json:"username" gorm:"primary_key"`
-	Password string `json:""`
+	gorm.Model
+	Username string `gorm:"primaryKey;not null;"`
+	Password string 
 }
 
-
+type TodoElement struct{
+	gorm.Model
+	ID int `gorm:"primaryKey;autoincrement;"`
+	Username  string
+	User User `gorm:"foreignKey:Username;reference:Username;constraint:OnUpdate:CASCADE,OnDelete:SET NULL;"`
+	Title string
+	Done bool
+}
 
 func ConnectDB() *gorm.DB{
 	dsn := fmt.Sprintf("%s:%s@%s(%s:%d)/%s?charset=utf8mb4&parseTime=True&loc=Local",USERNAME,PASSWORD,NETWORK,SERVER,PORT,DATABASE)
@@ -37,20 +45,22 @@ func ConnectDB() *gorm.DB{
 	if err := Db.AutoMigrate(new(User)); err != nil{
 		fmt.Println(err)
 	}
+
+	if err := Db.AutoMigrate(new(TodoElement)); err != nil{
+		fmt.Println(err)
+	}
 	return Db
 }
 
 func CheckUserPass(db *gorm.DB, username, password string) bool{
 	user := new(User)
-	user.Username = username
-	if err := db.First(&user).Error; err != nil {
+	if err := db.Where("username = ?", username).First(&user).Error; err != nil {
+		log.Println(err)
 		return false
 	}
-	
-	if user.Password != password {
-		return false
-	}
-	return true
+	log.Println(user.Username)
+	log.Println(user.Password)
+	return user.Password == password
 }
 
 func EmptyUserPass(username, password string) bool {
@@ -72,4 +82,30 @@ func CreateUser(db *gorm.DB, username, password string) error {
 	user.Password = password
 	user.Username = username
 	return db.Create(user).Error
+}
+
+func GetTodoList(db *gorm.DB, username string) []TodoElement{
+	element := new([]TodoElement)
+	db.Model(&TodoElement{}).Where("username = ?", username).Find(&element)
+	return *element
+}
+
+func CreateTodo(db *gorm.DB, username, title string) error {
+	element := new(TodoElement)
+	element.Done = false
+	element.Title = title
+	element.Username = username
+	return db.Create(element).Error
+}
+
+func DoneTodo(db *gorm.DB, id int, done bool) error {
+	element := new(TodoElement)
+	if err := db.Model(&TodoElement{}).Where("id=?", id).First(&element).Error; err != nil{
+		return err
+	}
+	element.Done = done
+	if err := db.Save(&element).Error; err != nil{
+		return err
+	}
+	return nil
 }

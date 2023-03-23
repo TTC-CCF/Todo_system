@@ -1,14 +1,56 @@
 {{template "header.html" .}}
 <section class="section">
   <div class="container">
-    <h1 class="title">
-      Dashboard
+    <h1 class="title is-centered">
+      {{.user}}'s Todoos
     </h1>
 
-    <div class="columns">
-      <div class="column is-one-third">{{template "menu.html" .}}</div>
-      <div class="column is-two-thirds"><p  style="background-color: whitesmoke; padding: 10px;">{{.content}}</p></div>
+    <div class="columns is-mobile is-centered">
+      <div class="column is-half">
+        <div class="block">
+          <p class="tag is-light">{{.content}}</p>
+          <form action="/dashboard" method="POST">
+            <div class="field is-grouped">
+              <p class="control is-expanded">
+                <input class="input" type="text" placeholder="Enter title" name="title" required>
+                <input type="hidden" name="method" value="createTodo">
+              </p>
+              <p class="control">
+                <button class="button is-primary">
+                  Create
+                </button>
+              </p>
+            </div>
+          </form>
+        </div>
+      </div>
+      
     </div>
+    <div class="columns is-centered">
+      <div class="column is-one-fifth"></div>
+      <div class="column" id="todo"> 
+        {{range .todolist}}
+          {{if not .Done}}
+          <div class="panel-block">
+            <label style="word-break:break-all"><input type="checkbox" id="{{.ID}}" onclick="submit_radio(this)">{{.Title}}</label>
+          </div>
+          {{end}}
+          
+        {{end}}
+      </div>
+      <div class="column" id="done">
+        {{range .todolist}}
+          {{if .Done}}
+          <div class="panel-block">
+            <label style="word-break:break-all; text-decoration:line-through"><input type="checkbox" id="{{.ID}}" onclick="submit_radio(this)" checked>{{.Title}}</label>
+          </div>
+          {{end}}
+          
+        {{end}}
+      </div>
+      <div class="column is-one-fifth"></div>
+    </div>
+
   </div>
 </section>
 {{template "footer.html"}}
