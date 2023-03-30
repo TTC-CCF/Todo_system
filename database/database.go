@@ -109,3 +109,7 @@ func DoneTodo(db *gorm.DB, id int, done bool) error {
 	}
 	return nil
 }
+
+func DeleteTodo(db *gorm.DB, id int) error {
+	return db.Where("id=?",id).Unscoped().Delete(&TodoElement{}).Error
+}

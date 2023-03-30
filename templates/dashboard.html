@@ -5,7 +5,7 @@
       {{.user}}'s Todoos
     </h1>
 
-    <div class="columns is-mobile is-centered">
+    <div class="columns is-centered">
       <div class="column is-half">
         <div class="block">
           <p class="tag is-light">{{.content}}</p>
@@ -26,30 +26,49 @@
       </div>
       
     </div>
-    <div class="columns is-centered">
+    <div class="columns">
       <div class="column is-one-fifth"></div>
-      <div class="column" id="todo"> 
+      <div class="column" id="todo">
+        <p class="panel-heading">
+          Todoo
+        </p>
         {{range .todolist}}
           {{if not .Done}}
-          <div class="panel-block">
-            <label style="word-break:break-all"><input type="checkbox" id="{{.ID}}" onclick="submit_radio(this)">{{.Title}}</label>
+          <div class="notification">
+            <label style="word-break:break-all" class="checkbox">
+              <input type="checkbox" id="{{.ID}}" onclick="submit_radio(this)">
+              {{.Title}}
+            </label>
+            <button class="delete is-small" onclick="delete_todo(this.parentElement, {{.ID}})"></button>
           </div>
           {{end}}
-          
         {{end}}
       </div>
       <div class="column" id="done">
+        <p class="panel-heading">
+          Done
+        </p>
         {{range .todolist}}
           {{if .Done}}
-          <div class="panel-block">
-            <label style="word-break:break-all; text-decoration:line-through"><input type="checkbox" id="{{.ID}}" onclick="submit_radio(this)" checked>{{.Title}}</label>
+          <div class="notification">
+            <label style="word-break:break-all" class="checkbox">
+              <input type="checkbox" id="{{.ID}}" onclick="submit_radio(this)" checked>
+              {{.Title}}
+            </label>
+            <button class="delete is-small" onclick="delete_todo(this.parentElement, {{.ID}})"></button>
           </div>
           {{end}}
-          
         {{end}}
       </div>
       <div class="column is-one-fifth"></div>
     </div>
+    {{if not .todolist}}
+      <div class="columns is-centered">
+        <p class="panel-block">
+          There's nothing in your Todo
+        </p>
+      </div>
+    {{end}}
 
   </div>
 </section>

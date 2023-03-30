@@ -137,11 +137,13 @@ func LogoutGetHandler() gin.HandlerFunc {
 			return
 		}
 		session.Delete(globals.Userkey)
+		
 		if err := session.Save(); err != nil {
 			log.Println("Failed to save session:", err)
 			return
 		}
-		c.Redirect(http.StatusTemporaryRedirect, "/")
+		
+		c.Redirect(http.StatusTemporaryRedirect,  "/")
 	}
 }
 
@@ -174,7 +176,6 @@ func DashboardPostHandler(db *gorm.DB) gin.HandlerFunc {
 		session := sessions.Default(c)
 		user := session.Get(globals.Userkey)		
 		method := c.Request.FormValue("method")
-		log.Println(method)
 		if method == "createTodo"{
 			title := c.PostForm("title")
 			if err := database.CreateTodo(db, fmt.Sprint(user), title); err != nil{
@@ -186,7 +187,7 @@ func DashboardPostHandler(db *gorm.DB) gin.HandlerFunc {
 			idstring := c.Request.PostForm.Get("ID")
 			donestring := c.Request.PostForm.Get("Done")
 
-			log.Println(idstring)
+			
 			donebool, _ := strconv.ParseBool(donestring)
 			idint, _:= strconv.Atoi(idstring)
 			if err := database.DoneTodo(db, idint, donebool); err != nil{
@@ -194,7 +195,14 @@ func DashboardPostHandler(db *gorm.DB) gin.HandlerFunc {
 				return
 			}
 		}
-
+		if method == "Delete"{
+			idstring := c.Request.PostForm.Get("ID")
+			idint, _:= strconv.Atoi(idstring)
+			if err := database.DeleteTodo(db, idint); err != nil{
+				log.Println(err)
+				return
+			}
+		}
 		c.Redirect(http.StatusMovedPermanently, "/dashboard")
 	}
 }

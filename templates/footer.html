@@ -28,7 +28,6 @@
 
   function submit_radio(element) {
     if (element.checked){
-      element.parentElement.style.textDecoration = "line-through";
       moveto = document.getElementById("done");
       moveto.appendChild(element.parentElement.parentElement);
       id = element.id;
@@ -37,7 +36,7 @@
         url: "/dashboard",
         data: {"method":"Done", "ID":id, "Done":true},
         success: function(response) {
-          console.log(response);
+          document.location.reload();
         },
         error: function(xhr, status, error) {
           console.log("Error: " + error);
@@ -45,7 +44,6 @@
       });
     }
     else{
-      element.parentElement.style.textDecoration = "none";
       moveto = document.getElementById("todo");
       moveto.appendChild(element.parentElement.parentElement);
       id = element.id;
@@ -55,6 +53,7 @@
         data: {"method":"Done", "ID":id, "Done":false},
         success: function(response) {
           console.log(response);
+          document.location.reload();
         },
         error: function(xhr, status, error) {
           console.log("Error: " + error);
@@ -63,7 +62,22 @@
     }
 
 
-  }
+  };
+
+  function delete_todo(element, id){
+    element.style.display="none";
+    $.ajax({
+      type: "POST",
+      url: "/dashboard",
+      data: {"method":"Delete", "ID":id},
+      success: function(response) {
+        document.location.reload();
+      },
+      error: function(xhr, status, error) {
+        console.log("Error: " + error);
+      }
+    });
+  };
 </script>
 </html>
 {{end}}
