@@ -11,10 +11,10 @@ import (
 
 
 const (
-	USERNAME = "popuku"
+	USERNAME = "root"
 	PASSWORD = "123"
 	NETWORK = "tcp"
-	SERVER = "127.0.0.1"
+	SERVER = "localhost"
 	PORT = 3306
 	DATABASE = "todo_system"
 )

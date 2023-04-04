@@ -32,5 +32,5 @@ func main() {
 	private.Use(middleware.AuthRequired)
 	routes.PrivateRoutes(private, db)
 
-	router.Run("localhost:3000")
+	router.Run("localhost:8080")
 }

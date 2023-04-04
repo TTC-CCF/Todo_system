@@ -152,7 +152,7 @@ func IndexGetHandler() gin.HandlerFunc {
 		session := sessions.Default(c)
 		user := session.Get(globals.Userkey)
 		c.HTML(http.StatusOK, "index.html", gin.H{
-			"content": "",
+			"content": "hello world",
 			"user":    user,
 		})
 	}
