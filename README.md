@@ -4,7 +4,7 @@ Project base learning for Golang
 - Using Bulma for frontend template
 - Deploy my website on aws ec2 instance
 ### URL
-[http://ec2-13-211-56-39.ap-southeast-2.compute.amazonaws.com:3000/)
+[https://mealsgogogo.online](https://mealsgogogo.online)
 
 ### Screen shots
 ![image](https://user-images.githubusercontent.com/93956496/228829522-2b700b1c-ce90-4988-9929-bc20675aa0fb.png)
