@@ -4,7 +4,7 @@ Project base learning for Golang
 - Using Bulma for frontend template
 - Deploy my website on aws ec2 instance
 ### URL
-[http://todoos.online](http://todoos.online)
+[https://todoos.online](https://todoos.online)
 
 ### Screen shots
 ![image](https://user-images.githubusercontent.com/93956496/228829522-2b700b1c-ce90-4988-9929-bc20675aa0fb.png)
