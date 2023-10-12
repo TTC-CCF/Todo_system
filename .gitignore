@@ -49,6 +49,7 @@ builds/**/images/*
 # security / ssl
 *.pem
 *.xxjson
+.env
 
 # docker 
 Dockerfile

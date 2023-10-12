@@ -1,0 +1,20 @@
+version: "3"
+
+services:
+  db:
+    image: mysql
+    container_name: golang-mysql
+    ports:
+      - "3306:3306"
+    environment:
+      MYSQL_ROOT_HOST: "localhost"
+      MYSQL_ROOT_PASSWORD: "123"
+      MYSQL_DATABASE: todo_system
+      MYSQL_USER: root
+    networks:
+      - my-network
+networks:
+  my-network:
+    driver: bridge
+
+

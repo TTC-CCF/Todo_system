@@ -4,20 +4,19 @@ import (
 	"github.com/gin-contrib/sessions"
 	"github.com/gin-contrib/sessions/cookie"
 	"github.com/gin-gonic/gin"
+
 	//"html/template"
 	//"strings"
+
+	database "Todo_system/database"
 	globals "Todo_system/globals"
 	middleware "Todo_system/middleware"
 	routes "Todo_system/routes"
-	database "Todo_system/database"
 )
 
-
 func main() {
+	globals.Init()
 	db := database.ConnectDB()
-
-
-
 	router := gin.Default()
 
 	router.Static("/assets", "./assets")
